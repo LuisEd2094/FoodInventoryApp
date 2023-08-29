@@ -3,12 +3,18 @@ from django.urls import reverse
 from .forms import LoginForm, RegisterForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
+from house.models import House
 
 
 # Create your views here.
 
 def index(request):
-    return render(request, 'users/index.html')
+    print(request.user.house_id)    
+    try:
+        house = House.objects.get(pk=request.user.house_id)
+    except:
+        house = None
+    return render(request, 'users/index.html', {'house': house})
 
 def sign_in(request):
     if request.method == "GET":

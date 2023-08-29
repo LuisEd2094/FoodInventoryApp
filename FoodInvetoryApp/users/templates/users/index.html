@@ -4,4 +4,10 @@
 
 
 <p>This is Index</p>
+{% if house %}
+    <div>{{house.name}}</div>
+{%else%}
+    <div>You have no house</div>
+    <a href="{%url 'house:create_house' %}">Create a new house</a>
+{%endif%}
 {% endblock content %}
