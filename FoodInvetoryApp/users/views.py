@@ -4,17 +4,26 @@ from .forms import LoginForm, RegisterForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from house.models import House
+from invite.models import Invite
 
 
 # Create your views here.
 
 def index(request):
-    print(request.user.house_id)    
     try:
         house = House.objects.get(pk=request.user.house_id)
-    except:
+    except House.DoesNotExist:
         house = None
-    return render(request, 'users/index.html', {'house': house})
+    try:
+        pending_invites = Invite.objects.filter(receiving_user=request.user, status='pending')
+    except Invite.DoesNotExist:
+        pending_invites = []
+    context = {
+        'house': house,
+        'pending_invites' : pending_invites,
+    }
+    print(pending_invites)
+    return render(request, 'users/index.html', context)
 
 def sign_in(request):
     if request.method == "GET":

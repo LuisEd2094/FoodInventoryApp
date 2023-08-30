@@ -6,8 +6,15 @@
 <p>This is Index</p>
 {% if house %}
     <div>{{house.name}}</div>
+    <a href="{%url 'invite:send_invitation'%}">Invite an user to your house</a>
+
 {%else%}
     <div>You have no house</div>
     <a href="{%url 'house:create_house' %}">Create a new house</a>
+    {% if pending_invites %}
+    <p>You have pending invitations. Check your notifications!</p>
+    {% else %}
+    <p>No pending invitations at the moment.</p>
+    {% endif %}
 {%endif%}
 {% endblock content %}
