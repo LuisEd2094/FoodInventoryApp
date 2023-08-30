@@ -4,17 +4,32 @@
 
 
 <p>This is Index</p>
-{% if house %}
-    <div>{{house.name}}</div>
-    <a href="{%url 'invite:send_invitation'%}">Invite an user to your house</a>
-
+{%if request.user.is_authenticated %}
+    {% if house %}
+        <h4>Your house:</h2>
+        <div>{{house.name}}</div>
+        <a href="{%url 'invite:send_invitation'%}">Invite an user to your house</a>
+    {%else%}
+        <div>You have no house</div>
+        <a href="{%url 'house:create_house' %}">Create a new house</a>
+        {% if pending_invites %}
+        {% for invitation in pending_invites %}
+        <div>You have been invited to join {{invitation.house.name}} </div>
+        <form action="{% url 'invite:accept_invitation' invitation.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Accept</button>
+        </form>
+        <form action="{% url 'invite:decline_invitation' invitation.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Decline</button>
+        </form>
+        {%endfor%}
+        
+        {% else %}
+        <p>No pending invitations at the moment.</p>
+        {% endif %}
+    {%endif%}
 {%else%}
-    <div>You have no house</div>
-    <a href="{%url 'house:create_house' %}">Create a new house</a>
-    {% if pending_invites %}
-    <p>You have pending invitations. Check your notifications!</p>
-    {% else %}
-    <p>No pending invitations at the moment.</p>
-    {% endif %}
+<div>Create a profile to use me man!</div>
 {%endif%}
 {% endblock content %}

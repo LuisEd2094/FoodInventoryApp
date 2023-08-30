@@ -10,20 +10,30 @@ from invite.models import Invite
 # Create your views here.
 
 def index(request):
-    try:
-        house = House.objects.get(pk=request.user.house_id)
-    except House.DoesNotExist:
-        house = None
-    try:
-        pending_invites = Invite.objects.filter(receiving_user=request.user, status='pending')
-    except Invite.DoesNotExist:
+    if request.user.is_authenticated:
+        try:
+            house = House.objects.get(pk=request.user.house_id)
+        except House.DoesNotExist:
+            house = []
+        try:
+            pending_invites = Invite.objects.filter(receiving_user=request.user, status='pending')
+        except Invite.DoesNotExist:
+            pending_invites = []
+        context = {
+            'house': house,
+            'pending_invites' : pending_invites,
+        }
+        return render(request, 'users/index.html', context)
+    else:
+        house = []
         pending_invites = []
-    context = {
-        'house': house,
-        'pending_invites' : pending_invites,
-    }
-    print(pending_invites)
-    return render(request, 'users/index.html', context)
+        context = {
+            'house': house,
+            'pending_invites' : pending_invites,
+        }
+        return render(request, 'users/index.html', context)
+
+    
 
 def sign_in(request):
     if request.method == "GET":

@@ -28,13 +28,28 @@ def send_invitation(request):
                     message = message,
                 )
                 invite.save()
-                messages.success(request, f'Invite send to {receiving_username}')
+                messages.success(request, f'Invite sent to {receiving_username}')
                 redirect(reverse('users:index'))
             except User.DoesNotExist:
                 messages.error(request, f'Couldn\'t send message to {receiving_username}, check username again')
                 return render(request, 'invite/send_invitation.html', {'form' : form})
-
-
     else:
         form = InvitationForm()
         return render(request, 'invite/send_invitation.html', {'form' : form})
+
+
+@login_required
+def accept_invitation(request, invitation_id):
+    invitation = Invite.objects.get(pk=invitation_id)
+    invitation.status = 'accepted'
+    invitation.save()
+    request.user.house = invitation.house
+    request.user.save()
+    return redirect("users:index")
+
+@login_required
+def decline_invitation(request, invitation_id):
+    invitation = Invite.objects.get(pk=invitation_id)
+    invitation.status = 'declined'
+    invitation.save()
+    return redirect("users:index")
