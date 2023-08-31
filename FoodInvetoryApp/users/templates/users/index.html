@@ -18,7 +18,8 @@
         {%else%}
         <div>You don't have any ingredients yet!</div>
         {%endif%}
-        <a href="{%url 'house:view' pk=house.id %}">View house</a>
+        <a href="{%url 'house:add_ingredients'%}">Add ingredient</a>
+        <a href="{%url 'house:view' %}">View house</a>
         <a href="{%url 'invite:send_invitation'%}">Invite an user to your house</a>
     {%else%}
         <div>You have no house</div>
