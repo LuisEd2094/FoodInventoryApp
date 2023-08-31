@@ -3,7 +3,7 @@ from django.urls import reverse
 from .forms import LoginForm, RegisterForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
-from house.models import House
+from house.models import House, Ingredients
 from invite.models import Invite
 
 
@@ -19,9 +19,14 @@ def index(request):
             pending_invites = Invite.objects.filter(receiving_user=request.user, status='pending')
         except Invite.DoesNotExist:
             pending_invites = []
+        if house:
+            ingredients = house.ingredients_set.all()
+        else:
+            ingredients = []
         context = {
             'house': house,
             'pending_invites' : pending_invites,
+            'ingredients' : ingredients,
         }
         return render(request, 'users/index.html', context)
     else:

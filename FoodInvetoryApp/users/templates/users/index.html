@@ -8,6 +8,16 @@
     {% if house %}
         <h4>Your house:</h2>
         <div>{{house}}</div>
+        {% if ingredients%}
+        <h2>Your ingredients</h2>
+        <ul>
+            {%for ingredient in ingredients%}
+            <li>{{ingredient}}</li>
+            {%endfor%}
+        </ul>
+        {%else%}
+        <div>You don't have any ingredients yet!</div>
+        {%endif%}
         <a href="{%url 'house:view' pk=house.id %}">View house</a>
         <a href="{%url 'invite:send_invitation'%}">Invite an user to your house</a>
     {%else%}

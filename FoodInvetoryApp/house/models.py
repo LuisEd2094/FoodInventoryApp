@@ -9,4 +9,6 @@ class House(models.Model):
 class Ingredients(models.Model):
     name = models.CharField(max_length=100)
     houses = models.ManyToManyField(House)
+    def __str__(self):
+        return self.name
     
