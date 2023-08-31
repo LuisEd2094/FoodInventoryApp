@@ -7,7 +7,7 @@
 {%if request.user.is_authenticated %}
     {% if house %}
         <h4>Your house:</h2>
-        <div>{{house.name}}</div>
+        <div>{{house}}</div>
         <a href="{%url 'house:view' pk=house.id %}">View house</a>
         <a href="{%url 'invite:send_invitation'%}">Invite an user to your house</a>
     {%else%}

@@ -3,16 +3,21 @@
 
 <div>This is your house information:</div>
 <div>{{house.name}}</div>
-<a href="{%url  'house:edit' pk=house.id %}">Edit House</a>
-<ul>
+
     {%if users %}
+
     <div>Users in this house:</div>
+    <ul>
         {%for user in users%} 
             <li>{{user.username}}</li>
         {%endfor%}
+    </ul>
     {%else%}
     <div>You are the only member in this house. Invite someone!</div>
     {%endif%}
-</ul>
+
 <a href="{%url 'invite:send_invitation'%}">Invite an user to your house</a>
+<a href="{%url  'house:edit' pk=house.id %}">Edit House</a>
+<a href="{%url 'house:delete' pk=house.pk %}">Delete House</a>
+
 {%endblock%}

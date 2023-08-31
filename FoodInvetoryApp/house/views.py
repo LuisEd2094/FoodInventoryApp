@@ -8,7 +8,7 @@ from django.contrib import messages
 
 # Create your views here.
 @login_required
-def create_house(request):
+def house_form(request):
     if request.method == 'POST':
         form = HouseForm(request.POST)
         if form.is_valid():
@@ -47,4 +47,12 @@ def edit(request, pk):
     else:
         form = HouseForm(instance=house)
         return render(request, 'house/house_form.html', {'form': form})
-        
+    
+@login_required
+def delete(request, pk):
+    house = get_object_or_404(House, pk=pk)
+    if request.method == 'POST':
+        house.delete()
+        messages.success(request, f'Successfully deleted your House')
+        return redirect('users:index')
+    return render(request, 'house/confirm_delete.html', {'house': house})

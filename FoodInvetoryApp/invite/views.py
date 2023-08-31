@@ -29,7 +29,7 @@ def send_invitation(request):
                 )
                 invite.save()
                 messages.success(request, f'Invite sent to {receiving_username}')
-                redirect(reverse('users:index'))
+                return redirect(reverse('users:index'))
             except User.DoesNotExist:
                 messages.error(request, f'Couldn\'t send message to {receiving_username}, check username again')
                 return render(request, 'invite/send_invitation.html', {'form' : form})
