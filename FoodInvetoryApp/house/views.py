@@ -1,6 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import HouseForm
+from .models import House
+from users.models import User
 from django.urls import reverse
 from django.contrib import messages
 
@@ -18,5 +20,31 @@ def create_house(request):
             return redirect(reverse('users:index'))
     else:
         form = HouseForm()
-        return render(request, 'house/create_house.html', {'form': form})
+        return render(request, 'house/house_form.html', {'form': form})
+    
+@login_required
+def view(request, pk):
+    house = get_object_or_404(House, pk=pk)
+    users_list = get_list_or_404(User, house_id= house)
+    users = [user for user in users_list if user.id != request.user.id]
+    usernames =[user.username for user in users]
+    print(usernames)
+    context = {
+        'house' : house,
+        'users' : users,
+    }
+    return render(request, 'house/view.html', context)
+    
+@login_required
+def edit(request, pk):
+    house = get_object_or_404(House, pk=pk)
+    if request.method == 'POST':
+        form = HouseForm(request.POST, instance=house)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'Successfully edit house')
+            return redirect(reverse('users:index'))
+    else:
+        form = HouseForm(instance=house)
+        return render(request, 'house/house_form.html', {'form': form})
         

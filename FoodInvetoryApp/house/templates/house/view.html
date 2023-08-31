@@ -1,0 +1,18 @@
+{%extends 'base.html'%}
+{%block content%}
+
+<div>This is your house information:</div>
+<div>{{house.name}}</div>
+<a href="{%url  'house:edit' pk=house.id %}">Edit House</a>
+<ul>
+    {%if users %}
+    <div>Users in this house:</div>
+        {%for user in users%} 
+            <li>{{user.username}}</li>
+        {%endfor%}
+    {%else%}
+    <div>You are the only member in this house. Invite someone!</div>
+    {%endif%}
+</ul>
+<a href="{%url 'invite:send_invitation'%}">Invite an user to your house</a>
+{%endblock%}

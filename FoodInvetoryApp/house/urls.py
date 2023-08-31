@@ -4,5 +4,8 @@ from . import views
 app_name = 'house'
 
 urlpatterns = [
-                path('create_house/', views.create_house, name ='create_house'),
+                path('house_form/', views.create_house, name ='create_house'),
+                path('edit/<int:pk>/', views.edit, name="edit"),
+                path('view/<int:pk>', views.view, name='view'),
+                
                ]
